@@ -14,26 +14,36 @@ class FF14skills:
             {
                 'class':'tank',
                 'name':'tank',
+                'name_cn':'防护职业',
+                'name_short_cn':'坦克,坦',
                 'order':1
             },
             {
                 'class':'healer',
                 'name':'healer',
+                'name_cn':'治疗职业',
+                'name_short_cn':'奶妈,奶',
                 'order':2,
             },
             {
                 'class':'meleeDps',
                 'name':'melee dps',
+                'name_cn':'近战职业',
+                'name_short_cn':'近战',
                 'order':3
             },
             {
                 'class':'phyRangedDps',
                 'name':'physical ranged dps',
+                'name_cn':'远程职业',
+                'name_short_cn':'远程,远敏',
                 'order':4
             },
             {
                 'class':'magRangedDps',
                 'name':'magical ranged dps',
+                'name_cn':'魔法职业',
+                'name_short_cn':'法师',
                 'order':5
             }
         ]
@@ -78,7 +88,7 @@ class FF14skills:
                 'name':'Paladin',
                 'name_short':'pld',
                 'name_cn':'骑士',
-                'name_short_cn':'骑士,骑',
+                'name_short_cn':'帕拉丁,骑',
                 'order':4,
             },
             {
@@ -88,7 +98,7 @@ class FF14skills:
                 'name':'Warrior',
                 'name_short':'war',
                 'name_cn':'战士',
-                'name_short_cn':'战士,战',
+                'name_short_cn':'战爹,战',
                 'order':5
             },
             {
@@ -98,7 +108,7 @@ class FF14skills:
                 'name':'Dark Knight',
                 'name_short':'drk',
                 'name_cn':'暗黑骑士',
-                'name_short_cn':'黑骑',
+                'name_short_cn':'黑骑,死骑',
                 'order':6
             },
             #melee dps
@@ -109,7 +119,7 @@ class FF14skills:
                 'name':'Monk',
                 'name_short':'mnk',
                 'name_cn':'武僧',
-                'name_short_cn':'僧',
+                'name_short_cn':'秃子,僧',
                 'order':7
             },
             {

@@ -5,7 +5,7 @@
 from urllib.request import urlopen,urlretrieve
 from urllib.error import HTTPError
 from bs4 import BeautifulSoup
-import os,re,json
+import os,re,json,sys
 
 class FF14skills:
 
@@ -254,23 +254,42 @@ class FF14skills:
             raise Exception('error')
     
     def saveJobClassSkillsToFile(self):
+        if len(self.jobClassSkills) == 0:
+            self.analyzeAll()
         print('saveJobClassSkillsToFile.........')
         filePath = os.path.join(self.getPath('skilljs'), 'jobClassSkills.js')
-        with open(filePath, 'w', encoding='gbk') as f:
-            f.write('jobClassSkills = ')
-            f.write(json.dumps(self.jobClassSkills, ensure_ascii=False))
-            print('jobClassSkill file saved as '+filePath)
+        self.saveToFile(self.jobClassSkills, filePath)
+        print('jobClassSkill file saved as '+filePath)
         return self.jobClassSkills
         
     def saveJobSkillsToFile(self):
-        print('saveJobSkillsToFile.........')
         skills = self.analyzeAll()
         filePath = os.path.join(self.getPath('skilljs'), 'jobSkills.js')
-        with open(filePath, 'w', encoding='gbk') as f:
-            f.write('jobSkills = ')
-            f.write(json.dumps(skills, ensure_ascii=False))
-            print('jobSkill file saved as '+filePath)
+        self.saveToFile(skills,filePath)
+        print('jobSkill file saved as '+filePath)
         return skills
+        
+    def saveJobClassesToFile(self):
+        classes = self.getJobClasses()
+        filePath = os.path.join(self.getPath('skilljs'), 'jobClasses.js')
+        self.saveToFile(classes, filePath)
+        print('jobClasses file saved as '+filePath)
+        return classes
+        
+    def saveToFile(self, content, path, encoding='utf8'):
+        with open(path, 'w', encoding=encoding) as f:
+            f.write('module.exports = ');
+            f.write(json.dumps(content, ensure_ascii=False))
+        
+    def getJobClasses(self):
+        res = {}
+        for name,v in self.jobs.items():
+            jobClass = v['class']
+            if jobClass not in res:
+                res[jobClass] = []
+            v['iconFilePath'] = '/resources/jobicons/{}.png'.format(name)
+            res[jobClass].append(v)
+        return [{'class':k, 'jobs':v} for (k,v) in res.items()]
         
     def handleIcon(self, iconUri, jobKey):
         pattern = '.*\/([a-zA-Z0-9\_\-]+)\.([a-zA-Z]+)$'
@@ -290,7 +309,23 @@ class FF14skills:
             return iconFileName
         
 if __name__ == '__main__':
+    if len(sys.argv)==1:
+        usage = '''
+Usage:
+    python ./getSkills.py (all/skills/classskills/classes)
+        '''
+        print(usage)
+        sys.exit(0)
     x = FF14skills()
-    #([print(item) for item in x.analyzeAll()[0]])
-    x.saveJobSkillsToFile()
-    x.saveJobClassSkillsToFile()
+    for param in sys.argv:
+        param = param.lower()
+        if param in ['all', 'skills']:
+            x.saveJobSkillsToFile()
+        if param in ['all', 'classskills']:
+            x.saveJobClassSkillsToFile()
+        if param in ['all', 'classes']:
+            x.saveJobClassesToFile()
+    #x.saveJobSkillsToFile()
+    #x.saveJobClassSkillsToFile()
+    #x.saveJobClassesToFile()
+    #print(x.getJobClasse())

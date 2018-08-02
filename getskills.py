@@ -10,157 +10,199 @@ import os,re,json,sys
 class FF14skills:
 
     def __init__(self):
-        self.jobClasses = {
-            'tank':{
-                'name':'tank'
+        self.jobClasses = [
+            {
+                'class':'tank',
+                'name':'tank',
+                'order':1
             },
-            'healer':{
-                'name':'healer'
+            {
+                'class':'healer',
+                'name':'healer',
+                'order':2,
             },
-            'meleeDps':{
-                'name':'melee dps'
+            {
+                'class':'meleeDps',
+                'name':'melee dps',
+                'order':3
             },
-            'phyRangedDps':{
-                'name':'physical ranged dps'
+            {
+                'class':'phyRangedDps',
+                'name':'physical ranged dps',
+                'order':4
             },
-            'magRangedDps':{
-                'name':'magical ranged dps'
+            {
+                'class':'magRangedDps',
+                'name':'magical ranged dps',
+                'order':5
             }
-        }
-        self.jobs = {
+        ]
+        self.jobClassesDict = {c['class']:c for c in self.jobClasses}
+        self.jobs = [
             #healers
-            'whitemage':{
+            {
+                'job':'whitemage',
                 'class':'healer',
                 'weburl': 'whitemage',
                 'name':'White Mage',
                 'name_short':'whm',
                 'name_cn':'白魔法师',
-                'name_short_cn':'白魔,白'
+                'name_short_cn':'白魔,白',
+                'order':1,
             },
-            'scholar':{
+            {
+                'job':'scholar',
                 'class':'healer',
                 'weburl': 'scholar',
                 'name':'Scholar',
                 'name_short':'sch',
                 'name_cn':'学者',
-                'name_short_cn':'学者,学'
+                'name_short_cn':'学者,学',
+                'order':2,
             },
-            'astrologian':{
+            {   
+                'job':'astrologian',
                 'class':'healer',
                 'weburl': 'astrologian',
                 'name':'Astrologian',
                 'name_short':'ast',
                 'name_cn':'占星术师',
-                'name_short_cn':'占星,占'
+                'name_short_cn':'占星,占',
+                'order':3,
             },
             #tanks
-            'paladin':{
+            {
+                'job':'paladin',
                 'class':'tank',
                 'weburl':'paladin',
                 'name':'paladin',
                 'name_short':'pld',
                 'name_cn':'骑士',
-                'name_short_cn':'骑士,骑'
+                'name_short_cn':'骑士,骑',
+                'order':4,
             },
-            'warrior':{
+            {
+                'job':'warrior',
                 'class':'tank',
                 'weburl':'warrior',
                 'name':'warrior',
                 'name_short':'war',
                 'name_cn':'战士',
-                'name_short_cn':'战士,战'
+                'name_short_cn':'战士,战',
+                'order':5
             },
-            'darkknight':{
+            {
+                'job':'darkknight',
                 'class':'tank',
                 'weburl':'darkknight',
                 'name':'darkknight',
                 'name_short':'drk',
                 'name_cn':'暗黑骑士',
-                'name_short_cn':'黑骑'
+                'name_short_cn':'黑骑',
+                'order':6
             },
             #melee dps
-            'monk':{
+            {
+                'job':'monk',
                 'class':'meleeDps',
                 'weburl':'monk',
                 'name':'monk',
                 'name_short':'mnk',
                 'name_cn':'武僧',
-                'name_short_cn':'僧'
+                'name_short_cn':'僧',
+                'order':7
             },
-            'dragoon':{
+            {
+                'job':'dragoon',
                 'class':'meleeDps',
                 'weburl':'dragoon',
                 'name':'dragoon',
                 'name_short':'drg',
                 'name_cn':'龙骑士',
-                'name_short_cn':'龙骑,龙'
+                'name_short_cn':'龙骑,龙',
+                'order':8
             },
-            'ninja':{
+            {
+                'job':'ninja',
                 'class':'meleeDps',
                 'weburl':'ninja',
                 'name':'ninja',
                 'name_short':'nin',
                 'name_cn':'忍者',
-                'name_short_cn':'忍'
+                'name_short_cn':'忍',
+                'order':9
             },
-            'samurai':{
+            {
+                'job':'samurai',
                 'class':'meleeDps',
                 'weburl':'samurai',
                 'name':'samurai',
                 'name_short':'sam',
                 'name_cn':'武士',
-                'name_short_cn':'侍'
+                'name_short_cn':'侍',
+                'order':10
             },
             # ranged
-            'bard':{
+            {
+                'job':'bard',
                 'class':'phyRangedDps',
                 'weburl':'bard',
                 'name':'bard',
                 'name_short':'brd',
                 'name_cn':'诗人',
-                'name_short_cn':'诗'
+                'name_short_cn':'诗',
+                'order':11
             },
-            'machinist':{
+            {
+                'job':'machinist',
                 'class':'phyRangedDps',
                 'weburl':'machinist',
                 'name':'machinist',
                 'name_short':'mch',
                 'name_cn':'机工士',
-                'name_short_cn':'机工,机'
+                'name_short_cn':'机工,机',
+                'order':12
             },
-            'blackmage':{
+            {
+                'job':'blackmage',
                 'class':'magRangedDps',
                 'weburl':'blackmage',
                 'name':'blackmage',
                 'name_short':'blm',
                 'name_cn':'黑魔法师',
-                'name_short_cn':'黑魔,黑'
+                'name_short_cn':'黑魔,黑',
+                'order':13
             },
-            'summoner':{
+            {
+                'job':'summoner',
                 'class':'magRangedDps',
                 'weburl':'summoner',
                 'name':'summoner',
                 'name_short':'smn',
                 'name_cn':'召唤师',
-                'name_short_cn':'召唤,召'
+                'name_short_cn':'召唤,召',
+                'order':14
             },
-            'redmage':{
+            {   
+                'job':'redmage',
                 'class':'magRangedDps',
                 'weburl':'redmage',
                 'name':'redmage',
                 'name_short':'rdm',
                 'name_cn':'赤魔法师',
-                'name_short_cn':'赤魔,赤'
+                'name_short_cn':'赤魔,赤',
+                'order':15
             },
-        }
-        self.jobClassSkills = {}    # 职能技能
+        ]
+        self.jobClassSkills= {}    # 职能技能
         
-    def getWebpageUrl(self,jobKey):
-        url = 'http://act.ff.sdo.com/project/20170901battle/{}.html'.format(self.jobs[jobKey]['weburl'])
+    def getWebpageUrl(self,placeholder):
+        url = 'http://act.ff.sdo.com/project/20170901battle/{}.html'.format(placeholder)
         return url
         
     def extractSkillTableContent(self, jobKey, tableContent, idPrefix=''):
-        skillsOfType = {}
+        skillsOfType = []
+        skillsOfTypeSaved = {}
         skillTrs = tableContent.find('tbody')('tr')
         # save skills
         nextID = 0
@@ -187,17 +229,19 @@ class FF14skills:
                     skill[cls] = [s for s in td.strings]
                 else:
                     pass
-            if id in skillsOfType:
-                print('{}: skill id {} exist! {}'.format(jobKey, id, skillsOfType[id]))
-            skillsOfType[id] = skill
+            if id in skillsOfTypeSaved:
+                print('{}: skill id {} exist! {}'.format(jobKey, id, skillsOfTypeaved[id]))
+            skillsOfTypeSaved[id] = skill
+            skillsOfType.append(skill)
         return skillsOfType
         
-    def analyzeJob(self,jobKey):
+    def analyzeJob(self,job):
         print('-'*20)
+        jobKey = job['job']
         print('processing: '+jobKey)
-        obj = BeautifulSoup(urlopen(self.getWebpageUrl(jobKey)), 'html5lib')
+        obj = BeautifulSoup(urlopen(self.getWebpageUrl(job['weburl'])), 'html5lib')
         tempContent = obj('div',class_=['js__select--pve','job__content--battle'])
-        res = {'skills':[], 'jobkey':jobKey}
+        res = {'skillTypes':[], 'job':job}
         for item in tempContent:
             skillContents = item('div',class_='job__content__wrapper')
             # get update date
@@ -217,7 +261,7 @@ class FF14skills:
                     h3Name = h3.get_text() 
                     if h3Name == '职能技能':
                         # handle 职能技能 which is not saved yet
-                        jobClass = self.jobs[jobKey]['class']
+                        jobClass = job['class']
                         if jobClass not in self.jobClassSkills:
                             jobClassSkills = self.extractSkillTableContent(jobClass, skillContent, jobClass)
                             self.jobClassSkills[jobClass] = jobClassSkills
@@ -231,7 +275,7 @@ class FF14skills:
                             idPrefix = chr(skillType)
                             skillType += 1
                         skillsOfType = self.extractSkillTableContent(jobKey, skillContent, idPrefix)
-                        res['skills'].append({'name':h3Name, 'value':skillsOfType})
+                        res['skillTypes'].append({'name':h3Name, 'skills':skillsOfType})
                         print('{} handled with type "{}".'.format(h3Name, idPrefix))
                 else:
                     # no h3 means 职业量普
@@ -240,7 +284,7 @@ class FF14skills:
         return res     
         
     def analyzeAll(self):
-        res = {j:self.analyzeJob(j) for j in self.jobs}
+        res = [self.analyzeJob(j) for j in self.jobs]
         return res
         
     def getPath(self, type, getAbspath=False):
@@ -256,7 +300,6 @@ class FF14skills:
     def saveJobClassSkillsToFile(self):
         if len(self.jobClassSkills) == 0:
             self.analyzeAll()
-        print('saveJobClassSkillsToFile.........')
         filePath = os.path.join(self.getPath('skilljs'), 'jobClassSkills.js')
         self.saveToFile(self.jobClassSkills, filePath)
         print('jobClassSkill file saved as '+filePath)
@@ -282,14 +325,12 @@ class FF14skills:
             f.write(json.dumps(content, ensure_ascii=False))
         
     def getJobClasses(self):
-        res = {}
-        for name,v in self.jobs.items():
-            jobClass = v['class']
-            if jobClass not in res:
-                res[jobClass] = []
-            v['iconFilePath'] = '/resources/jobicons/{}.png'.format(name)
-            res[jobClass].append(v)
-        return [{'class':k, 'jobs':v} for (k,v) in res.items()]
+        res = []
+        for cls in self.jobClasses:
+            cls['jobs'] = [job for job in self.jobs if job['class']==cls['class']]
+            cls['iconFilePath'] = '/resources/jobicons/{}.png'.format(cls['class'])
+            res.append(cls)
+        return res
         
     def handleIcon(self, iconUri, jobKey):
         pattern = '.*\/([a-zA-Z0-9\_\-]+)\.([a-zA-Z]+)$'

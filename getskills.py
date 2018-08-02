@@ -220,8 +220,8 @@ class FF14skills:
                 if cls == 'skill':
                     iconSrc = td.find('img')['src']
                     # skill['icon'] = iconSrc
-                    iconFile = self.handleIcon(iconSrc, jobKey)
-                    if iconFile: skill['iconFile'] = iconFile
+                    icon = self.handleIcon(iconSrc, jobKey)
+                    if icon: skill['icon'] = icon
                     skill['name'] = td.find('p').find('strong').get_text()
                 elif cls in ['classification', 'cast', 'recast']:
                     skill[cls] = td.get_text()
@@ -293,6 +293,8 @@ class FF14skills:
             return os.path.join(cur, 'resources', 'skillicons')
         elif type == 'skilljs':
             return os.path.join(cur, 'resources')
+        elif type == 'jobicons':
+            return os.path.join(cur, 'resources', 'jobicons')
         else:
             print('Type "{}" not defined!'.format(type))
             raise Exception('error')
@@ -328,7 +330,7 @@ class FF14skills:
         res = []
         for cls in self.jobClasses:
             cls['jobs'] = [job for job in self.jobs if job['class']==cls['class']]
-            cls['iconFilePath'] = '/resources/jobicons/{}.png'.format(cls['class'])
+            cls['icon'] = '{}.png'.format(cls['class'])
             res.append(cls)
         return res
         
@@ -348,6 +350,8 @@ class FF14skills:
                 urlretrieve(iconUri, iconFileFullPath)
                 print('{}: {} saved'.format(jobKey,iconFileName))
             return iconFileName
+        else:
+            return None
         
 if __name__ == '__main__':
     if len(sys.argv)==1:

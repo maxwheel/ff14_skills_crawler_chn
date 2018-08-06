@@ -227,7 +227,7 @@ class FF14skills:
             for td in skillTr('td'):
                 if 'class' not in td.attrs: continue    # skip TDs without class
                 cls = td['class'][0]
-                if cls == 'skill':
+                if cls == 'skill':          # skill name and icon
                     iconSrc = td.find('img')['src']
                     # skill['icon'] = iconSrc
                     icon = self.handleIcon(iconSrc, jobKey)
@@ -235,8 +235,14 @@ class FF14skills:
                     skill['name'] = td.find('p').find('strong').get_text()
                 elif cls in ['classification', 'cast', 'recast']:
                     skill[cls] = td.get_text()
-                elif cls == 'content':
+                elif cls == 'content':      # skill description
                     skill[cls] = [s for s in td.strings]
+                elif cls == 'jobclass':     # lv when the skill could be learned
+                    lv = td.find('p')
+                    if lv:
+                        lv = lv.get_text().lower()
+                        if 'lv' in lv:
+                            skill['lv'] = lv.strip('lv')
                 else:
                     pass
             if id in skillsOfTypeSaved:

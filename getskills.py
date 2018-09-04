@@ -15,35 +15,35 @@ class FF14skills:
                 'class':'tank',
                 'name':'tank',
                 'name_cn':'防护职业',
-                'name_short_cn':'坦克,坦',
+                'name_short_cn':'坦克,坦,T',
                 'order':1
             },
             {
                 'class':'healer',
                 'name':'healer',
                 'name_cn':'治疗职业',
-                'name_short_cn':'奶妈,奶',
+                'name_short_cn':'奶妈,奶,H',
                 'order':2,
             },
             {
                 'class':'meleeDps',
                 'name':'melee dps',
                 'name_cn':'近战职业',
-                'name_short_cn':'近战',
+                'name_short_cn':'近战,D',
                 'order':3
             },
             {
                 'class':'phyRangedDps',
                 'name':'physical ranged dps',
                 'name_cn':'远程职业',
-                'name_short_cn':'远程,远敏',
+                'name_short_cn':'远程,远敏,D',
                 'order':4
             },
             {
                 'class':'magRangedDps',
                 'name':'magical ranged dps',
                 'name_cn':'魔法职业',
-                'name_short_cn':'法师',
+                'name_short_cn':'法师,D',
                 'order':5
             }
         ]
@@ -346,7 +346,8 @@ class FF14skills:
         res = []
         for cls in self.jobClasses:
             cls['jobs'] = [job for job in self.jobs if job['class']==cls['class']]
-            cls['icon'] = '{}.png'.format(cls['class'])
+            #cls['icon'] = '{}.png'.format(cls['class'])
+            cls['icon'] = '{}'.format(cls['class'])
             res.append(cls)
         return res
         

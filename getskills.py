@@ -232,15 +232,15 @@ class FF14skills:
                     # skill['icon'] = iconSrc
                     icon = self.handleIcon(iconSrc, jobKey)
                     if icon: skill['icon'] = icon.split('.')[0]
-                    skill['name'] = td.find('p').find('strong').get_text()
+                    skill['name'] = td.find('p').find('strong').get_text().strip("\n")
                 elif cls in ['classification', 'cast', 'recast']:
-                    skill[cls] = td.get_text()
+                    skill[cls] = td.get_text().strip("\n")
                 elif cls == 'content':      # skill description
-                    skill[cls] = [s for s in td.strings]
+                    skill[cls] = [s.strip("\n") for s in td.strings]
                 elif cls == 'jobclass':     # lv when the skill could be learned
                     lv = td.find('p')
                     if lv:
-                        lv = lv.get_text().lower()
+                        lv = lv.get_text().lower().strip("\n")
                         if 'lv' in lv:
                             skill['lv'] = lv.strip('lv')
                 else:
@@ -263,7 +263,7 @@ class FF14skills:
             # get update date
             updatedAt = item.find('p', class_='job__update')
             if updatedAt:
-                updatedAt = updatedAt.get_text()
+                updatedAt = updatedAt.get_text().strip("\n")
                 search = re.search('(\d{4})\D{0,1}(\d{1,2})\D{0,1}(\d{1,2})', updatedAt)
                 if search:
                     updatedAt = '/'.join(search.groups())
@@ -274,7 +274,7 @@ class FF14skills:
             for skillContent in skillContents:
                 h3 = skillContent.find('h3', class_='job__sub_title')
                 if h3:
-                    h3Name = h3.get_text() 
+                    h3Name = h3.get_text().strip("\n")
                     if h3Name == '职能技能':
                         # handle 职能技能 which is not saved yet
                         jobClass = job['class']

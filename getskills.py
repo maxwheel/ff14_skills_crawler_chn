@@ -70,7 +70,7 @@ class FF14skills:
                 'name_short_cn':'学者,学',
                 'order':2,
             },
-            {   
+            {
                 'job':'astrologian',
                 'class':'healer',
                 'weburl': 'astrologian',
@@ -108,7 +108,7 @@ class FF14skills:
                 'name':'Dark Knight',
                 'name_short':'drk',
                 'name_cn':'暗黑骑士',
-                'name_short_cn':'黑骑,死骑',
+                'name_short_cn':'黑骑,暗骑',
                 'order':6
             },
             #melee dps
@@ -193,7 +193,7 @@ class FF14skills:
                 'name_short_cn':'召唤,召',
                 'order':14
             },
-            {   
+            {
                 'job':'redmage',
                 'class':'magRangedDps',
                 'weburl':'redmage',
@@ -205,11 +205,11 @@ class FF14skills:
             },
         ]
         self.jobClassSkills= {}    # 职能技能
-        
+
     def getWebpageUrl(self,placeholder):
         url = 'http://act.ff.sdo.com/project/20170901battle/{}.html'.format(placeholder)
         return url
-        
+
     def extractSkillTableContent(self, jobKey, tableContent, idPrefix=''):
         skillsOfType = []
         skillsOfTypeSaved = {}
@@ -250,7 +250,7 @@ class FF14skills:
             skillsOfTypeSaved[id] = skill
             skillsOfType.append(skill)
         return skillsOfType
-        
+
     def analyzeJob(self,job):
         print('-'*20)
         jobKey = job['job']
@@ -296,13 +296,13 @@ class FF14skills:
                 else:
                     # no h3 means 职业量普
                     pass
-                    
-        return res     
-        
+
+        return res
+
     def analyzeAll(self):
         res = [self.analyzeJob(j) for j in self.jobs]
         return res
-        
+
     def getPath(self, type, getAbspath=False):
         cur = getAbspath and os.path.abspath(os.curdir) or os.curdir
         if type == 'skillicons':
@@ -314,7 +314,7 @@ class FF14skills:
         else:
             print('Type "{}" not defined!'.format(type))
             raise Exception('error')
-    
+
     def saveJobClassSkillsToFile(self):
         if len(self.jobClassSkills) == 0:
             self.analyzeAll()
@@ -322,26 +322,26 @@ class FF14skills:
         self.saveToFile(self.jobClassSkills, filePath)
         print('jobClassSkill file saved as '+filePath)
         return self.jobClassSkills
-        
+
     def saveJobSkillsToFile(self):
         skills = self.analyzeAll()
         filePath = os.path.join(self.getPath('skilljs'), 'jobSkills.js')
         self.saveToFile(skills,filePath)
         print('jobSkill file saved as '+filePath)
         return skills
-        
+
     def saveJobClassesToFile(self):
         classes = self.getJobClasses()
         filePath = os.path.join(self.getPath('skilljs'), 'jobClasses.js')
         self.saveToFile(classes, filePath)
         print('jobClasses file saved as '+filePath)
         return classes
-        
+
     def saveToFile(self, content, path, encoding='utf8'):
         with open(path, 'w', encoding=encoding) as f:
             f.write('module.exports = ');
             f.write(json.dumps(content, ensure_ascii=False))
-        
+
     def getJobClasses(self):
         res = []
         for cls in self.jobClasses:
@@ -350,7 +350,7 @@ class FF14skills:
             cls['icon'] = '{}'.format(cls['class'])
             res.append(cls)
         return res
-        
+
     def handleIcon(self, iconUri, jobKey):
         pattern = '.*\/([a-zA-Z0-9\_\-]+)\.([a-zA-Z]+)$'
         currentPath = self.getPath('skillicons')
@@ -369,7 +369,7 @@ class FF14skills:
             return iconFileName
         else:
             return None
-        
+
 if __name__ == '__main__':
     if len(sys.argv)==1:
         usage = '''
